@@ -8,9 +8,9 @@ let s:source = {
 \ }
 
 let s:keywords = []
-let fname = expand('~/.tweetvim/screen_name')
-if filereadable(fname)
-  for word in readfile(fname)
+let s:fname = expand('~/.tweetvim/screen_name')
+if filereadable(s:fname)
+  for word in readfile(s:fname)
     call add(s:keywords, { 'word' : word, 'menu' : '[tweetvim]' })
   endfor
 endif
