@@ -25,7 +25,7 @@ function! s:source.get_complete_words(cur_keyword_pos, cur_keyword_str)
       call add(keywords, { 'word' : word, 'menu' : '[tweetvim]' })
     endfor
   endif
-  return neocomplcache#keyword_filter(copy(keywords), a:cur_keyword_str)
+  return neocomplcache#keyword_filter(keywords, a:cur_keyword_str)
 endfunction
 
 function! neocomplcache#sources#tweetvim_name_complete#define()
