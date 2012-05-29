@@ -18,14 +18,14 @@ function! s:source.get_keyword_pos(cur_text)
 endfunction
 
 function! s:source.get_complete_words(cur_keyword_pos, cur_keyword_str)
-  let s:keywords = []
-  let s:fname = g:tweetvim_config_dir . '/screen_name'
-  if filereadable(s:fname)
-    for s:word in readfile(s:fname)
-      call add(s:keywords, { 'word' : s:word, 'menu' : '[tweetvim]' })
+  let keywords = []
+  let fname = g:tweetvim_config_dir . '/screen_name'
+  if filereadable(fname)
+    for word in readfile(fname)
+      call add(keywords, { 'word' : word, 'menu' : '[tweetvim]' })
     endfor
   endif
-  return neocomplcache#keyword_filter(copy(s:keywords), a:cur_keyword_str)
+  return neocomplcache#keyword_filter(copy(keywords), a:cur_keyword_str)
 endfunction
 
 function! neocomplcache#sources#tweetvim_name_complete#define()
