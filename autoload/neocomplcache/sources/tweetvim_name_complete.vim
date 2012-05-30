@@ -8,6 +8,8 @@ let s:source = {
 \ }
 
 function! s:source.initialize()
+  call neocomplcache#set_completion_length('tweetvim_name_complete',
+        \ g:neocomplcache_auto_completion_start_length)
 endfunction
 
 function! s:source.finalize()
