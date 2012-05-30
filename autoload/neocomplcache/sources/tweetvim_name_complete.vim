@@ -21,9 +21,7 @@ function! s:source.get_complete_words(cur_keyword_pos, cur_keyword_str)
   let keywords = []
   let fname = g:tweetvim_config_dir . '/screen_name'
   if filereadable(fname)
-    for word in readfile(fname)
-      call add(keywords, { 'word' : word, 'menu' : '[tweetvim]' })
-    endfor
+    let keywords = map(readfile(fname), "{ 'word' : v:val, 'menu' : '[tweetvim]' }")
   endif
   return neocomplcache#keyword_filter(keywords, a:cur_keyword_str)
 endfunction
