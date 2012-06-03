@@ -16,7 +16,16 @@ function! s:source.finalize()
 endfunction
 
 function! s:source.get_keyword_pos(cur_text)
-  return matchend(a:cur_text, '@')
+  let col = col('.')
+  let pos = 0
+  while 1
+    let idx = stridx(a:cur_text, '@', pos + 1)
+    if idx == -1 || idx >= col
+      break
+    endif
+    let pos = idx
+  endwhile
+  return matchend(a:cur_text, '@', pos)
 endfunction
 
 function! s:source.get_complete_words(cur_keyword_pos, cur_keyword_str)
