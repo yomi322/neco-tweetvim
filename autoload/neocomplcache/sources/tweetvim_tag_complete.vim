@@ -29,11 +29,8 @@ function! s:source.get_keyword_pos(cur_text)
 endfunction
 
 function! s:source.get_complete_words(cur_keyword_pos, cur_keyword_str)
-  let keywords = []
-  let fname = g:tweetvim_config_dir . '/hash_tag'
-  if filereadable(fname)
-    let keywords = map(readfile(fname), "{ 'word' : v:val, 'menu' : '[tweetvim]' }")
-  endif
+  let keywords = map(tweetvim#cache#get('hash_tag'),
+        \ "{ 'word' : v:val, 'menu' : '[tweetvim]' }")
   return neocomplcache#keyword_filter(keywords, a:cur_keyword_str)
 endfunction
 
