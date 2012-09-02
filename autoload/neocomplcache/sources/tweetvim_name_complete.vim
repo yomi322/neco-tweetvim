@@ -45,7 +45,6 @@ function! neocomplcache#sources#tweetvim_name_complete#define()
 endfunction
 
 function! neocomplcache#sources#tweetvim_name_complete#recache(...)
-  echo "reacache"
   let s:keywords = map(a:1,
         \ "{ 'word' : v:val, 'menu' : '[tweetvim]' }")
 endfunction
