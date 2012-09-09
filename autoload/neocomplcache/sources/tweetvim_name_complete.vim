@@ -33,11 +33,12 @@ function! s:source.get_keyword_pos(cur_text)
 endfunction
 
 function! s:source.get_complete_words(cur_keyword_pos, cur_keyword_str)
+  let &titlestring = string(a:cur_keyword_pos) . " " . a:cur_keyword_str
   if !exists('s:keywords')
     let s:keywords = map(tweetvim#cache#get('screen_name'),
           \ "{ 'word' : v:val, 'menu' : '[tweetvim]' }")
   endif
-  return neocomplcache#keyword_filter(s:keywords, a:cur_keyword_str)
+  return neocomplcache#keyword_filter(copy(s:keywords), a:cur_keyword_str)
 endfunction
 
 function! neocomplcache#sources#tweetvim_name_complete#define()

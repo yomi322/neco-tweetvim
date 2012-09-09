@@ -37,7 +37,7 @@ function! s:source.get_complete_words(cur_keyword_pos, cur_keyword_str)
     let s:keywords = map(tweetvim#cache#get('hash_tag'),
           \ "{ 'word' : v:val, 'menu' : '[tweetvim]' }")
   endif
-  return neocomplcache#keyword_filter(s:keywords, a:cur_keyword_str)
+  return neocomplcache#keyword_filter(copy(s:keywords), a:cur_keyword_str)
 endfunction
 
 function! neocomplcache#sources#tweetvim_tag_complete#define()
