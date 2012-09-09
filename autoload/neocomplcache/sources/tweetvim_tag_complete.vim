@@ -7,6 +7,10 @@ let s:source = {
 \   'filetypes' : { 'tweetvim_say' : 1 },
 \ }
 
+call tweetvim#add_hook(
+      \ 'write_hash_tag',
+      \ 'neocomplcache#sources#tweetvim_tag_complete#recache')
+
 function! s:source.initialize()
   call neocomplcache#set_completion_length('tweetvim_tag_complete',
         \ g:neocomplcache_auto_completion_start_length)
@@ -29,13 +33,20 @@ function! s:source.get_keyword_pos(cur_text)
 endfunction
 
 function! s:source.get_complete_words(cur_keyword_pos, cur_keyword_str)
-  let keywords = map(tweetvim#cache#get('hash_tag'),
-        \ "{ 'word' : v:val, 'menu' : '[tweetvim]' }")
-  return neocomplcache#keyword_filter(keywords, a:cur_keyword_str)
+  if !exists('s:keywords')
+    let s:keywords = map(tweetvim#cache#get('hash_tag'),
+          \ "{ 'word' : v:val, 'menu' : '[tweetvim]' }")
+  endif
+  return neocomplcache#keyword_filter(copy(s:keywords), a:cur_keyword_str)
 endfunction
 
 function! neocomplcache#sources#tweetvim_tag_complete#define()
   return s:source
+endfunction
+
+function! neocomplcache#sources#tweetvim_tag_complete#recache(...)
+  let s:keywords = map(a:1,
+        \ "{ 'word' : v:val, 'menu' : '[tweetvim]' }")
 endfunction
 
 let &cpo = s:save_cpo
