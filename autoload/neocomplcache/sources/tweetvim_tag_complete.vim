@@ -7,7 +7,7 @@ let s:source = {
 \   'filetypes' : { 'tweetvim_say' : 1 },
 \ }
 
-call tweetvim#add_hook(
+call tweetvim#hook#add(
       \ 'write_hash_tag',
       \ 'neocomplcache#sources#tweetvim_tag_complete#recache')
 
