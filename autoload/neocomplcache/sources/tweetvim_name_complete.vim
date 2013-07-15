@@ -37,6 +37,9 @@ function! s:source.get_complete_words(cur_keyword_pos, cur_keyword_str)
     let s:keywords = map(tweetvim#cache#get('screen_name'),
           \ "{ 'word' : v:val, 'menu' : '[tweetvim]' }")
   endif
+  if len(a:cur_keyword_str) < g:neocomplcache_auto_completion_start_length
+    return []
+  end
   return neocomplcache#keyword_filter(copy(s:keywords), a:cur_keyword_str)
 endfunction
 
