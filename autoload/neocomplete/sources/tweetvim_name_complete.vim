@@ -1,17 +1,18 @@
 let s:save_cpo = &cpo
 set cpo&vim
-
+"
+" source
+"
 let s:source = {
-\   'name'        : 'tweetvim_name_complete',
-\   'rank'        : 200,
-\   'kind'        : 'manual',
-\   'filetypes'   : { 'tweetvim_say' : 1 },
+\   'name'      : 'tweetvim_name_complete',
+\   'rank'      : 200,
+\   'kind'      : 'manual',
+\   'filetypes' : { 'tweetvim_say' : 1 },
 \ }
-
-call tweetvim#hook#add(
-      \ 'write_screen_name',
-      \ 'neocomplete#sources#tweetvim_name_complete#recache')
-
+"
+" return complete position after @.
+" return -1 if not completable.
+"
 function! s:source.get_complete_position(context)
   let col = col('.')
   let pos = 0
@@ -30,7 +31,9 @@ function! s:source.get_complete_position(context)
   
   return pos
 endfunction
-
+"
+" gather candidates from tweetvim's cache
+"
 function! s:source.gather_candidates(context)
   if !exists('s:keywords')
     let s:keywords = map(tweetvim#cache#get('screen_name'),
@@ -38,15 +41,24 @@ function! s:source.gather_candidates(context)
   endif
   return filter(copy(s:keywords), 'v:val.word =~ "' . a:context.complete_str . '"')
 endfunction
-
+"
+" source#define
+"
 function! neocomplete#sources#tweetvim_name_complete#define()
   return s:source
 endfunction
-
+"
+" hook to recache word
+"
+call tweetvim#hook#add(
+      \ 'write_screen_name',
+      \ 'neocomplete#sources#tweetvim_name_complete#recache')
+"
+" recache tweetvim's screen_name.
+"
 function! neocomplete#sources#tweetvim_name_complete#recache(...)
   let s:keywords = map(a:1, "{ 'word' : v:val, 'menu' : '[tweetvim]' }")
 endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
-
