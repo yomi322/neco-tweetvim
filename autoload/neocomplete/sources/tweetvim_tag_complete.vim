@@ -14,32 +14,14 @@ let s:source = {
 " return -1 if not completable.
 "
 function! s:source.get_complete_position(context)
-  let col = col('.')
-  let pos = 0
-  while 1
-    let idx = stridx(a:context.input, '#', pos + 1)
-    if idx == -1 || idx >= col
-      break
-    endif
-    let pos = idx
-  endwhile
-
-  let pos  = matchend(a:context.input, '#', pos)
-  let text = eval("a:context.input[" . string(pos) . ":" . string(pos + g:neocomplete#auto_completion_start_length) . "]")
-  let text = substitute(text, ' ', '', '#')
-  let pos  = len(text) < g:neocomplete#auto_completion_start_length ? -1 : pos
-  
-  return pos
+  return neocomplete#tweetvim#get_complete_position(
+             \ a:context, '#', g:neocomplete#auto_completion_start_length)
 endfunction
 "
 " gather candidates from tweetvim's cache
 "
 function! s:source.gather_candidates(context)
-  if !exists('s:keywords')
-    let s:keywords = map(tweetvim#cache#get('hash_tag'),
-          \ "{ 'word' : v:val, 'menu' : '[tweetvim]' }")
-  endif
-  return filter(copy(s:keywords), 'v:val.word =~ "' . a:context.complete_str . '"')
+  return neocomplete#tweetvim#gather_candidates(a:context, 'hash_tag')
 endfunction
 "
 " source#define
@@ -56,8 +38,8 @@ call tweetvim#hook#add(
 "
 " recache tweetvim's tag.
 "
-function! neocomplete#sources#tweetvim_name_complete#recache(...)
-  let s:keywords = map(a:1, "{ 'word' : v:val, 'menu' : '[tweetvim]' }")
+function! neocomplete#sources#tweetvim_tag_complete#recache(...)
+  call neocomplete#tweetvim#recache('hash_tag', a:1)
 endfunction
 
 let &cpo = s:save_cpo
