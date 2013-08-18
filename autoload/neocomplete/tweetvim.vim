@@ -1,3 +1,5 @@
+let s:save_cpo = &cpo
+set cpo&vim
 "
 "
 "
@@ -37,3 +39,6 @@ endfunction
 function! neocomplete#tweetvim#recache(key, values)
   let s:['keywords_' . a:key] = map(a:values, "{ 'word' : v:val, 'menu' : '[tweetvim]' }")
 endfunction
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
